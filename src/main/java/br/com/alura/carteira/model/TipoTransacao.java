@@ -1,4 +1,4 @@
-package br.com.alura.carteira.modelo;
+package br.com.alura.carteira.model;
 
 
 public enum TipoTransacao {
