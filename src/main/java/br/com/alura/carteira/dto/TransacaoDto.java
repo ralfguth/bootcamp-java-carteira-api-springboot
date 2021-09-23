@@ -3,7 +3,6 @@ package br.com.alura.carteira.dto;
 import java.math.BigDecimal;
 
 import br.com.alura.carteira.model.TipoTransacao;
-import br.com.alura.carteira.model.Transacao;
 
 public class TransacaoDto {
 
@@ -12,14 +11,6 @@ public class TransacaoDto {
 	private int quantidade;
 	private TipoTransacao tipo;
 
-	public TransacaoDto(Transacao transacao) {
-		this.ticker = transacao.getTicker();
-		this.preco = transacao.getPreco();
-		this.quantidade = transacao.getQuantidade();
-		this.tipo = transacao.getTipo();
-		
-	}
-	
 	public String getTicker() {
 		return ticker;
 	}
