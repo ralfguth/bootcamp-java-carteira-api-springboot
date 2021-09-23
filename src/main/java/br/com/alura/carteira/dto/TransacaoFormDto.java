@@ -1,25 +1,17 @@
-package br.com.alura.carteira.model;
+package br.com.alura.carteira.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public class Transacao {
+import br.com.alura.carteira.model.TipoTransacao;
+
+public class TransacaoFormDto {
 
 	private String ticker;
-	private LocalDate data;
 	private BigDecimal preco;
 	private int quantidade;
 	private TipoTransacao tipo;
-
-	public Transacao() {}
-
-	public Transacao(String ticker, LocalDate data, BigDecimal preco, int quantidade, TipoTransacao tipo) {
-		this.ticker = ticker;
-		this.data = data;
-		this.preco = preco;
-		this.quantidade = quantidade;
-		this.tipo = tipo;
-	}
+	private LocalDate data;
 
 	public String getTicker() {
 		return ticker;
@@ -27,14 +19,6 @@ public class Transacao {
 
 	public void setTicker(String ticker) {
 		this.ticker = ticker;
-	}
-
-	public LocalDate getData() {
-		return data;
-	}
-
-	public void setData(LocalDate data) {
-		this.data = data;
 	}
 
 	public BigDecimal getPreco() {
@@ -61,9 +45,12 @@ public class Transacao {
 		this.tipo = tipo;
 	}
 
-	@Override
-	public String toString() {
-		return "[ticker=" + ticker + ", preco=" + preco + ", quantidade=" + quantidade + ", data=" + data + ", tipo=" + tipo + "]";
+	public LocalDate getData() {
+		return data;
+	}
+
+	public void setData(LocalDate data) {
+		this.data = data;
 	}
 
 }
