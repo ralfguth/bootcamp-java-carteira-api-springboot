@@ -1,12 +1,10 @@
 package br.com.alura.carteira.controller;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
-import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,24 +13,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.alura.carteira.dto.UsuarioDto;
 import br.com.alura.carteira.dto.UsuarioFormDto;
-import br.com.alura.carteira.model.Usuario;
+import br.com.alura.carteira.service.UsuarioService;
 
 @RestController
 @RequestMapping("/usuarios")
 public class UsuarioController {
 
-	private List<Usuario> usuarios = new ArrayList<>();
-	private ModelMapper modelMapper = new ModelMapper();
+	@Autowired
+	private UsuarioService service;
 
 	@GetMapping
 	public List<UsuarioDto> listar() {
-		return usuarios.stream().map(usuario -> modelMapper.map(usuario, UsuarioDto.class)).collect(Collectors.toList());
+		return service.listar();
 	}
 
 	@PostMapping
 	public void cadastrar(@RequestBody @Valid UsuarioFormDto dto) {
-		Usuario usuario = modelMapper.map(dto, Usuario.class);
-		usuarios.add(usuario);
+		service.cadastrar(dto);
 	}
 
 }
