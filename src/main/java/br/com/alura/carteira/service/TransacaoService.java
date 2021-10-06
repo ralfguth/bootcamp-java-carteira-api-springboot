@@ -1,12 +1,11 @@
 package br.com.alura.carteira.service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,16 +21,16 @@ public class TransacaoService {
 	private TransacaoRepository repository;
 	private ModelMapper modelMapper = new ModelMapper();
 
-	public List<TransacaoDto> listar() {
-		List<Transacao> transacoes = repository.findAll();
-		return transacoes.stream().map(usuario -> modelMapper.map(usuario, TransacaoDto.class)).collect(Collectors.toList());
+	public Page<TransacaoDto> listar(Pageable paginacao) {
+		Page<Transacao> transacoes = repository.findAll(paginacao);
+		return transacoes.map(usuario -> modelMapper.map(usuario, TransacaoDto.class));
 	}
 
 	@Transactional
 	public void cadastrar(@Valid TransacaoFormDto dto) {
 		Transacao transacao = modelMapper.map(dto, Transacao.class);
 		transacao.setId(null);
-		// o modelmapper esta atribuindo o mesmo id para usuarioId e transacao, 
+		// o modelmapper esta atribuindo o mesmo id para usuarioId e transacao,
 		// essa gambiarra remove o id deixando para o banco a responsabilidade;
 		repository.save(transacao);
 	}
