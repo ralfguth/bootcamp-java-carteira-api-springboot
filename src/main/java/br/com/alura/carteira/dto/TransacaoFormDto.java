@@ -32,7 +32,7 @@ public class TransacaoFormDto {
 	private LocalDate data;
 	
 	@NotNull
-	private int quantidade;
+	private Integer quantidade;
 	
 	@NotNull
 	private TipoTransacao tipo;

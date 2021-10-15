@@ -12,7 +12,7 @@ public class TransacaoDto {
 
 	private String ticker;
 	private BigDecimal preco;
-	private int quantidade;
+	private Integer quantidade;
 	private TipoTransacao tipo;
 
 }
