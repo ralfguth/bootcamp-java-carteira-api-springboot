@@ -19,6 +19,7 @@ public class TransacaoService {
 
 	@Autowired
 	private TransacaoRepository repository;
+	
 	private ModelMapper modelMapper = new ModelMapper();
 
 	public Page<TransacaoDto> listar(Pageable paginacao) {
