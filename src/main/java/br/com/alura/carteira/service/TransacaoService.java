@@ -28,12 +28,14 @@ public class TransacaoService {
 	}
 
 	@Transactional
-	public void cadastrar(@Valid TransacaoFormDto dto) {
+	public TransacaoDto cadastrar(@Valid TransacaoFormDto dto) {
 		Transacao transacao = modelMapper.map(dto, Transacao.class);
 		transacao.setId(null);
 		// o modelmapper esta atribuindo o mesmo id para usuarioId e transacao,
 		// essa gambiarra remove o id deixando para o banco a responsabilidade;
 		repository.save(transacao);
+		
+		return modelMapper.map(transacao, TransacaoDto.class);
 	}
 
 }
