@@ -23,7 +23,7 @@ public class TransacaoFormDto {
 	@NotNull
 	@NotEmpty
 	@Size(min = 5, max = 6)
-	@Pattern(regexp = "[A-Z]{4}[0-9][0-9]?")
+	@Pattern(regexp = "[A-Z]{4}[0-9][0-9]?",message = "{transacao.ticker.invalido}")
 	private String ticker;
 	
 	@NotNull
