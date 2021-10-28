@@ -19,6 +19,8 @@ class CalculadoraDeImpostoServiceTest {
 	private Usuario usuario = new Usuario(1l, "Rafaela", "rafa@email.com", "123456");
 	private Transacao transacao;
 
+	// Exemplo de uso do Junit
+	
 	@Test
 	void transacaoDoTipoCompraNaoDeveriaTerImposto() {
 		transacao = new Transacao(120l, "BBSE3", LocalDate.now(), new BigDecimal("30.00"), 10, COMPRA, usuario);
