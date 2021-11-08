@@ -50,6 +50,8 @@ class TransacaoServiceTest {
 	@Test
 	void naoDeveriaCadastrarUmaTransacaoComUsuarioNaoExistente() throws Exception {
 		TransacaoFormDto formDto = new TransacaoFormDto("ITSA4", new BigDecimal("45.5"), LocalDate.now(), 25, TipoTransacao.COMPRA, 1l);
+		
+		//Mockito controla o funcionamento dos mocks
 		Mockito.when(usuarioRepository.getById(formDto.getUsuarioId())).thenThrow(EntityNotFoundException.class);
 		
 		assertThrows(IllegalArgumentException.class, () -> service.cadastrar(formDto));
