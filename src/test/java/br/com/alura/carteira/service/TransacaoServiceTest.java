@@ -37,24 +37,28 @@ class TransacaoServiceTest {
 
 	@Test
 	void deveriaCadastrarUmaTransacao() throws Exception {
-		TransacaoFormDto formDto = new TransacaoFormDto("ITSA4", new BigDecimal("45.5"), LocalDate.now(), 25, TipoTransacao.COMPRA, 1l);
+		TransacaoFormDto formDto = criarFormDto();
 		TransacaoDto dto = service.cadastrar(formDto);
+		
+		Mockito.verify(repository).save(Mockito.any()); //Mockito verifica se o mock está sendo usado
 
 		assertEquals(formDto.getTicker(), dto.getTicker());
 		assertEquals(formDto.getPreco(), dto.getPreco());
 		assertEquals(formDto.getQuantidade(), dto.getQuantidade());
 		assertEquals(formDto.getTipo(), dto.getTipo());
-		assertEquals(formDto.getUsuarioId(), dto.getUsuario().getId());
 	}
-	
+
 	@Test
-	void naoDeveriaCadastrarUmaTransacaoComUsuarioNaoExistente() throws Exception {
-		TransacaoFormDto formDto = new TransacaoFormDto("ITSA4", new BigDecimal("45.5"), LocalDate.now(), 25, TipoTransacao.COMPRA, 1l);
+	void naoDeveriaCadastrarUmaTransacaoComUsuarioInexistente() throws Exception {
+		TransacaoFormDto formDto = criarFormDto();
 		
 		//Mockito controla o funcionamento dos mocks
 		Mockito.when(usuarioRepository.getById(formDto.getUsuarioId())).thenThrow(EntityNotFoundException.class);
-		
 		assertThrows(IllegalArgumentException.class, () -> service.cadastrar(formDto));
 
+	}
+
+	private TransacaoFormDto criarFormDto() {
+		return new TransacaoFormDto("ITSA4", new BigDecimal("45.5"), LocalDate.now(), 25, TipoTransacao.COMPRA, 1l);
 	}
 }
