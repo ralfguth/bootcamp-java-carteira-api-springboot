@@ -1,7 +1,9 @@
 package br.com.alura.carteira.controller;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import javax.transaction.Transactional;
 
@@ -36,8 +38,7 @@ class UsuarioControllerTest {
 	@Test
 	void deveriaCadastrarUsuarioComDadosCompletos() throws Exception {
 		String json = "{\"nome\":\"fulano\", \"login\":\"fulano@email.com\"}";
-		mvc
-		.perform(post("/usuarios").contentType(MediaType.APPLICATION_JSON).content(json))
+		mvc.perform(post("/usuarios").contentType(MediaType.APPLICATION_JSON).content(json))
 		.andExpect(status().isCreated())
 		.andExpect(header().exists("Location"))
 		.andExpect(content().json(json));
