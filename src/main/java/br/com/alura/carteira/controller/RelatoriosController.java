@@ -17,13 +17,9 @@ public class RelatoriosController {
 	@Autowired
 	private RelatorioService service;
 	
-	
-	
 	@GetMapping("/carteira")
 	public List<ItemCarteiraDto> relatorioCarteiraDeInvestimentos(){
 		return service.relatorioCarteiraDeInvestimentos();
 	}
-	
-	
 
 }

@@ -2,9 +2,13 @@
 
 - Projeto de api REST na linguagem Java utilizando os frameworks [Spring Boot](https://start.spring.io/) e [Hibernate](https://hibernate.org/). 
 
-- Feito como atividade prática dos módulos 02 e 03 no Bootcamp Java realizado pela [Alura](https://www.alura.com.br/).
+- Feito como atividade prática no Bootcamp Java realizado pela [Alura](https://www.alura.com.br/).
 
 - Possibilita cadastro e acesso de transações financeiras.
+
+## :book: Documentação
+
+Ao rodar a aplicação a documentação fica disponível no em [localhost:8080/swagger-ui.html](localhost:8080/swagger-ui.html)
 
 ## 🛠 Tecnologias
 
