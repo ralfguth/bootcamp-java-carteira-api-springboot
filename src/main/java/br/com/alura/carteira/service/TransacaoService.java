@@ -10,6 +10,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.alura.carteira.dto.AtualizacaoTransacaoFormDto;
+import br.com.alura.carteira.dto.TransacaoDetalhadaDto;
 import br.com.alura.carteira.dto.TransacaoDto;
 import br.com.alura.carteira.dto.TransacaoFormDto;
 import br.com.alura.carteira.model.Transacao;
@@ -41,13 +43,30 @@ public class TransacaoService {
 			Usuario usuario = usuarioRepository.getById(idUsuario);
 			transacao.setId(null);
 			// o modelmapper esta atribuindo o mesmo id para usuarioId e transacao,
-			// essa gambiarra remove o id deixando para o banco a responsabilidade;
+			// essa gambiarra remove o id deixando para o banco a responsabilidade de gerar o id;
 			transacao.setUsuario(usuario);
 			repository.save(transacao);
 			return modelMapper.map(transacao, TransacaoDto.class);
 		} catch (EntityNotFoundException e) {
 			throw new IllegalArgumentException("usuário inexistente");
 		}
+	}
+
+	@Transactional
+	public TransacaoDto atualizar(AtualizacaoTransacaoFormDto dto) {
+		Transacao transacao = repository.getById(dto.getId());
+		transacao.atualizar(dto.getTicker(), dto.getData(), dto.getPreco(), dto.getQuantidade(), dto.getTipo());
+		return modelMapper.map(transacao, TransacaoDto.class);
+	}
+
+	@Transactional
+	public void remover(Long id) {
+		repository.deleteById(id);
+	}
+
+	public TransacaoDetalhadaDto detalhar(Long id) {
+			Transacao transacao = repository.findById(id).orElseThrow(() -> new EntityNotFoundException());
+			return modelMapper.map(transacao, TransacaoDetalhadaDto.class);
 	}
 
 }
