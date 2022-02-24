@@ -56,6 +56,7 @@ public class TransacaoService {
 	public TransacaoDto atualizar(AtualizacaoTransacaoFormDto dto) {
 		Transacao transacao = repository.getById(dto.getId());
 		transacao.atualizar(dto.getTicker(), dto.getData(), dto.getPreco(), dto.getQuantidade(), dto.getTipo());
+		// O hibernate percebe que foi carregado uma entidade do banco e após sobrescrever os atributos ele faz o update no banco
 		return modelMapper.map(transacao, TransacaoDto.class);
 	}
 
