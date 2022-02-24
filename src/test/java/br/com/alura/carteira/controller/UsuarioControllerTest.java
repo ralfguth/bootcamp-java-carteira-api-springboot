@@ -1,10 +1,5 @@
 package br.com.alura.carteira.controller;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import javax.transaction.Transactional;
 
 import org.junit.jupiter.api.Test;
@@ -16,6 +11,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -26,22 +23,26 @@ class UsuarioControllerTest {
 
 	@Autowired
 	private MockMvc mvc;
+	// o MockMvc simula uma requisição http para a aplicação
 
 	@Test
 	void naoDeveriaCadastrarUsuarioComDadosIncompletos() throws Exception {
 		String json = "{}";
+
 		mvc
-		.perform(post("/usuarios").contentType(MediaType.APPLICATION_JSON).content(json))
-		.andExpect(status().isBadRequest());
+		.perform(MockMvcRequestBuilders.post("/usuarios").contentType(MediaType.APPLICATION_JSON).content(json))
+		.andExpect(MockMvcResultMatchers.status().isBadRequest());
 	}
 
 	@Test
 	void deveriaCadastrarUsuarioComDadosCompletos() throws Exception {
 		String json = "{\"nome\":\"fulano\", \"login\":\"fulano@email.com\"}";
-		mvc.perform(post("/usuarios").contentType(MediaType.APPLICATION_JSON).content(json))
-		.andExpect(status().isCreated())
-		.andExpect(header().exists("Location"))
-		.andExpect(content().json(json));
+		
+		mvc
+		.perform(MockMvcRequestBuilders.post("/usuarios").contentType(MediaType.APPLICATION_JSON).content(json))
+		.andExpect(MockMvcResultMatchers.status().isCreated())
+		.andExpect(MockMvcResultMatchers.header().exists("Location"))
+		.andExpect(MockMvcResultMatchers.content().json(json));
 	}
 
 }
