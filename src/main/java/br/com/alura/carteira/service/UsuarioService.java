@@ -1,7 +1,5 @@
 package br.com.alura.carteira.service;
 
-import java.util.Random;
-
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
@@ -9,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.alura.carteira.dto.UsuarioDto;
@@ -21,7 +20,12 @@ public class UsuarioService {
 
 	@Autowired
 	private UsuarioRepository repository;
-	private ModelMapper modelMapper = new ModelMapper();
+
+	@Autowired
+	private ModelMapper modelMapper;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	public Page<UsuarioDto> listar(Pageable paginacao) {
 		Page<Usuario> usuarios = repository.findAll(paginacao);
@@ -29,10 +33,9 @@ public class UsuarioService {
 	}
 
 	@Transactional
-	public UsuarioDto cadastrar(@Valid UsuarioFormDto dto) {
-		Usuario usuario = modelMapper.map(dto, Usuario.class);
-		String senha = new Random().nextInt(999999) + "";
-		usuario.setSenha(senha);
+	public UsuarioDto cadastrar(@Valid UsuarioFormDto form) {
+		Usuario usuario = modelMapper.map(form, Usuario.class);
+		usuario.setSenha(passwordEncoder.encode(form.getSenha()));
 		repository.save(usuario);
 		return modelMapper.map(usuario, UsuarioDto.class);
 	}
