@@ -5,3 +5,5 @@ create table usuarios(
 	senha varchar(100) not null,
 	primary key(id)
 );
+
+insert into usuarios values(1,'Rafaela Cliente','rafaela', '$2a$10$w0tFdtmW9JKiZqklTQO7FuIzPvkvHOqVuj8Q49rrHdlvVV1qqoTMG')

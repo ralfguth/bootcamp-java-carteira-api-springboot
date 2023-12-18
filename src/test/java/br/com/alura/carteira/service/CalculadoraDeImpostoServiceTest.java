@@ -2,7 +2,7 @@ package br.com.alura.carteira.service;
 
 import static br.com.alura.carteira.model.TipoTransacao.COMPRA;
 import static br.com.alura.carteira.model.TipoTransacao.VENDA;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -29,7 +29,7 @@ class CalculadoraDeImpostoServiceTest {
 	@BeforeEach
 	void inicializar() throws Exception {
 		calculadora = new CalculadoraDeImpostoService();
-		usuario = new Usuario(1l, "Rafaela", "rafa@email.com", "123456");
+		usuario = new Usuario(1l, "Rafaela", "rafa@email.com", "123456", null);
 	}
 	
 	@Test
