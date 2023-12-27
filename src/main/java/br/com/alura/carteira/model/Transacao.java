@@ -56,4 +56,8 @@ public class Transacao {
 		this.tipo = tipo;
 	}
 
+	public boolean pertenceAoUsuario(Usuario logado) {
+		return this.usuario.equals(logado);
+	}
+
 }

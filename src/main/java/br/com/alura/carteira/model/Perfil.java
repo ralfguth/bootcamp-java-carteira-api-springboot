@@ -9,9 +9,11 @@ import javax.persistence.Table;
 import org.springframework.security.core.GrantedAuthority;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 @Entity
+@EqualsAndHashCode(of = "id")
 @Table(name = "perfis")
 public class Perfil implements GrantedAuthority {
 

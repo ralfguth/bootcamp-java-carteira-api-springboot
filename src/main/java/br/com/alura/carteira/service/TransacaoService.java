@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,17 +32,19 @@ public class TransacaoService {
 	@Autowired
 	private ModelMapper modelMapper;
 
-	public Page<TransacaoDto> listar(Pageable paginacao) {
-		Page<Transacao> transacoes = repository.findAll(paginacao);
-		return transacoes.map(usuario -> modelMapper.map(usuario, TransacaoDto.class));
+	public Page<TransacaoDto> listar(Pageable paginacao, Usuario usuario) {
+		Page<Transacao> transacoes = repository.findAllByUsuario(paginacao, usuario);
+		return transacoes.map(t -> modelMapper.map(t, TransacaoDto.class));
 	}
 
 	@Transactional
-	public TransacaoDto cadastrar(@Valid TransacaoFormDto dto) {
+	public TransacaoDto cadastrar(@Valid TransacaoFormDto dto, Usuario logado) {
 		Long idUsuario = dto.getUsuarioId();
 		try {
-			Transacao transacao = modelMapper.map(dto, Transacao.class);
 			Usuario usuario = usuarioRepository.getById(idUsuario);
+			validarUsuario(logado, usuario);
+			
+			Transacao transacao = modelMapper.map(dto, Transacao.class);
 			transacao.setId(null);
 			// o modelmapper esta atribuindo o mesmo id para usuarioId e transacao,
 			// essa gambiarra remove o id deixando para o banco a responsabilidade de gerar o id;
@@ -49,26 +52,42 @@ public class TransacaoService {
 			repository.save(transacao);
 			return modelMapper.map(transacao, TransacaoDto.class);
 		} catch (EntityNotFoundException e) {
-			throw new IllegalArgumentException("usuário inexistente");
+			throw new IllegalArgumentException("usuario inexistente");
 		}
 	}
 
 	@Transactional
-	public TransacaoDto atualizar(AtualizacaoTransacaoFormDto dto) {
+	public TransacaoDto atualizar(AtualizacaoTransacaoFormDto dto, Usuario logado) {
 		Transacao transacao = repository.getById(dto.getId());
+		validarUsuario(transacao, logado);
 		transacao.atualizar(dto.getTicker(), dto.getData(), dto.getPreco(), dto.getQuantidade(), dto.getTipo());
 		// O hibernate percebe que foi carregado uma entidade do banco e após sobrescrever os atributos ele faz o update no banco
 		return modelMapper.map(transacao, TransacaoDto.class);
 	}
 
 	@Transactional
-	public void remover(Long id) {
+	public void remover(Long id, Usuario logado) {
+		Transacao transacao = repository.getById(id);
+		validarUsuario(transacao, logado);
 		repository.deleteById(id);
 	}
 
-	public TransacaoDetalhadaDto detalhar(Long id) {
+	public TransacaoDetalhadaDto detalhar(Long id, Usuario logado) {
 			Transacao transacao = repository.findById(id).orElseThrow(() -> new EntityNotFoundException());
+			validarUsuario(transacao, logado);
 			return modelMapper.map(transacao, TransacaoDetalhadaDto.class);
+	}
+	
+	private void validarUsuario(Transacao transacao, Usuario logado) {
+		if (!transacao.pertenceAoUsuario(logado)) {
+			throw new AccessDeniedException("Acesso Negado");
+		}
+	}
+	
+	private void validarUsuario(Usuario logado, Usuario usuario) {
+		if (!logado.equals(usuario)) {
+			throw new AccessDeniedException("Acesso Negado");
+		}
 	}
 
 }
