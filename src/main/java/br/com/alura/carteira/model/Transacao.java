@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import br.com.alura.carteira.dto.TransacaoFormDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,8 +39,9 @@ public class Transacao {
 	private TipoTransacao tipo;
 	@ManyToOne
 	private Usuario usuario;
-	
-	public Transacao(String ticker, LocalDate data, BigDecimal preco, Integer quantidade, TipoTransacao tipo, Usuario usuario) {
+
+	public Transacao(String ticker, LocalDate data, BigDecimal preco, Integer quantidade, TipoTransacao tipo,
+			Usuario usuario) {
 		this.ticker = ticker;
 		this.data = data;
 		this.preco = preco;
@@ -58,6 +60,11 @@ public class Transacao {
 
 	public boolean pertenceAoUsuario(Usuario logado) {
 		return this.usuario.equals(logado);
+	}
+
+	public static Transacao from(TransacaoFormDto form, Usuario usuario) {
+		return new Transacao(form.getTicker(), form.getData(), form.getPreco(), form.getQuantidade(), form.getTipo(),
+				usuario);
 	}
 
 }

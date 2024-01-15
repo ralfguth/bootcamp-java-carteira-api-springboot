@@ -17,14 +17,12 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 
-@Getter
-@Setter
+@Data
 @ToString(exclude = { "senha" })
 @EqualsAndHashCode(of = "id")
 @AllArgsConstructor
@@ -34,7 +32,7 @@ import lombok.ToString;
 public class Usuario implements UserDetails {
 
 	private static final long serialVersionUID = 7919552846700501459L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
