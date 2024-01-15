@@ -15,3 +15,5 @@ insert into perfis values (1, 'ROLE_ADMIN');
 
 insert into perfis values (2, 'ROLE_COMUM');
 
+insert into perfis_usuarios(usuario_id,perfil_id) values(1,1)
+
