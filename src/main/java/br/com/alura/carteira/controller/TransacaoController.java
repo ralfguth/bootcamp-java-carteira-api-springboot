@@ -40,8 +40,7 @@ public class TransacaoController {
 
 	@GetMapping
 	@ApiOperation("Listar Transações")
-	public Page<TransacaoDto> listar(@PageableDefault(size = 10) Pageable paginacao,
-			@ApiIgnore @AuthenticationPrincipal Usuario logado) {
+	public Page<TransacaoDto> listar(@PageableDefault(size = 10) Pageable paginacao, @ApiIgnore @AuthenticationPrincipal Usuario logado) {
 		return service.listar(paginacao, logado);
 	}
 

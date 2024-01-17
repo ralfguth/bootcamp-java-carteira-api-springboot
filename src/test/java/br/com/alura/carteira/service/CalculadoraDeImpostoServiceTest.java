@@ -21,9 +21,8 @@ class CalculadoraDeImpostoServiceTest {
 	private Transacao transacao;
 
 	// Exemplo de uso do Junit
-	
 	private Transacao criarTransacao(BigDecimal preco, Integer quantidade, TipoTransacao tipo) {
-		return new Transacao(120l, "BBSE3", LocalDate.now(), preco, quantidade, tipo, usuario);
+		return new Transacao(120l, "BBSE3", LocalDate.now(), preco, quantidade, tipo, usuario, BigDecimal.ZERO);
 	}
 	
 	@BeforeEach

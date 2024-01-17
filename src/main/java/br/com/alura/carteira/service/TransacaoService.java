@@ -1,5 +1,7 @@
 package br.com.alura.carteira.service;
 
+import java.math.BigDecimal;
+
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 
@@ -28,23 +30,26 @@ public class TransacaoService {
 
 	@Autowired
 	private UsuarioRepository usuarioRepository;
-
+	
 	@Autowired
 	private ModelMapper modelMapper;
+	
+	@Autowired
+	private CalculadoraDeImpostoService impostoService;
 
 	public Page<TransacaoDto> listar(Pageable paginacao, Usuario usuario) {
 		Page<Transacao> transacoes = repository.findAllByUsuario(paginacao, usuario);
-		return transacoes.map(t -> modelMapper.map(t, TransacaoDto.class));
+		return transacoes.map(transacao -> TransacaoDto.from(transacao));
 	}
 
 	@Transactional
 	public TransacaoDto cadastrar(@Valid TransacaoFormDto dto, Usuario logado) {
-		Long idUsuario = dto.getUsuarioId();
 		try {
-			Usuario usuario = usuarioRepository.getById(idUsuario);
-			validarUsuario(logado, usuario);
-
-			Transacao transacao = Transacao.from(dto, usuario);
+			Usuario usuario = usuarioRepository.getById(dto.getUsuarioId());
+			validarUsuario(usuario, logado);
+			Transacao transacao = Transacao.from(dto, logado);
+			BigDecimal imposto = impostoService.calcular(transacao);
+			transacao.setImposto(imposto);
 			repository.save(transacao);
 			return TransacaoDto.from(transacao);
 		} catch (EntityNotFoundException e) {
@@ -80,9 +85,9 @@ public class TransacaoService {
 			throw new AccessDeniedException("Acesso Negado");
 		}
 	}
-
-	private void validarUsuario(Usuario logado, Usuario usuario) {
-		if (!logado.equals(usuario)) {
+	
+	private void validarUsuario(Usuario usuarioForm, Usuario logado) {
+		if (!usuarioForm.equals(logado)) {
 			throw new AccessDeniedException("Acesso Negado");
 		}
 	}

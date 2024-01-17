@@ -1,0 +1,1 @@
+alter table transacoes add imposto decimal(18,2);
